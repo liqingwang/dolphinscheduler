@@ -23,6 +23,7 @@ import org.apache.dolphinscheduler.api.utils.PageInfo;
 import org.apache.dolphinscheduler.common.enums.AuditModelType;
 import org.apache.dolphinscheduler.common.enums.AuditOperationType;
 import org.apache.dolphinscheduler.dao.entity.AuditLog;
+import org.apache.dolphinscheduler.dao.entity.User;
 import org.apache.dolphinscheduler.dao.mapper.AuditLogMapper;
 
 import org.apache.parquet.Strings;
@@ -95,6 +96,12 @@ public class AuditServiceImpl extends BaseServiceImpl implements AuditService {
         pageInfo.setTotal((int) logIPage.getTotal());
         pageInfo.setTotalList(auditDtos);
         return pageInfo;
+    }
+
+    @Override
+    public void delAuditLogById(User loginUser, int id) {
+        auditLogMapper.deleteById(id);
+        log.info("Delete audit log complete, audit id:{}", id);
     }
 
     private List<String> convertStringToList(String string) {

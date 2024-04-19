@@ -20,6 +20,7 @@ package org.apache.dolphinscheduler.api.service;
 import org.apache.dolphinscheduler.api.dto.AuditDto;
 import org.apache.dolphinscheduler.api.utils.PageInfo;
 import org.apache.dolphinscheduler.dao.entity.AuditLog;
+import org.apache.dolphinscheduler.dao.entity.User;
 
 /**
  * audit information service
@@ -51,4 +52,11 @@ public interface AuditService {
                                           String endTime, String userName, String modelName,
                                           Integer pageNo, Integer pageSize);
 
+    /**
+     * delete audit log by id
+     *
+     * @param loginUser login user
+     * @param id alert group id
+     */
+    void delAuditLogById(User loginUser, int id);
 }

@@ -17,8 +17,11 @@
 
 package org.apache.dolphinscheduler.api.controller;
 
+import static org.apache.dolphinscheduler.api.enums.Status.DELETE_ALERT_GROUP_ERROR;
 import static org.apache.dolphinscheduler.api.enums.Status.QUERY_AUDIT_LOG_LIST_PAGING;
 
+import org.apache.dolphinscheduler.api.audit.OperatorLog;
+import org.apache.dolphinscheduler.api.audit.enums.AuditType;
 import org.apache.dolphinscheduler.api.dto.AuditDto;
 import org.apache.dolphinscheduler.api.dto.auditLog.AuditModelTypeDto;
 import org.apache.dolphinscheduler.api.dto.auditLog.AuditOperationTypeDto;
@@ -33,7 +36,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -128,5 +133,25 @@ public class AuditLogController extends BaseController {
     @ApiException(QUERY_AUDIT_LOG_LIST_PAGING)
     public Result<List<AuditModelTypeDto>> queryAuditModelTypeList() {
         return Result.success(AuditModelTypeDto.getModelTypeDtoList());
+    }
+
+    /**
+     * delete by id
+     *
+     * @param loginUser login user
+     * @param id alert group id
+     * @return delete result code
+     */
+    @Operation(summary = "delAuditLogById", description = "DELETE_AUDIT_LOG_BY_ID_NOTES")
+    @Parameters({
+            @Parameter(name = "id", description = "AUDIT_LOG_ID", required = true, schema = @Schema(implementation = int.class, example = "100"))
+    })
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiException(DELETE_ALERT_GROUP_ERROR)
+    public Result<Boolean> delAuditLogById(@Parameter(hidden = true) @RequestAttribute(value = Constants.SESSION_USER) User loginUser,
+                                                @PathVariable(value = "id") int id) {
+        auditService.delAuditLogById(loginUser, id);
+        return Result.success(true);
     }
 }
