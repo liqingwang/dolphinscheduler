@@ -56,7 +56,7 @@ public interface AuditService {
      * delete audit log by id
      *
      * @param loginUser login user
-     * @param id alert group id
+     * @param id audit log id
      */
     void delAuditLogById(User loginUser, int id);
 }
